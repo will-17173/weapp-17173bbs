@@ -6,12 +6,12 @@
         <view class="page__bd">
             <view class="weui-cells weui-cells_after-title">
 
-                <navigator url="/pages/forumdisplay?fid={{item.fid}}&title={{item.name}}" class="weui-cell weui-cell_access" hover-class="weui-cell_active"  wx:for="{{forumlist}}" wx:for-item="item" wx:key="{{fid}}">
+                <navigator url="" class="weui-cell weui-cell_access" hover-class="weui-cell_active"  wx:for="{{forumlist}}" wx:for-item="item" wx:key="{{fid}}">
                     <view class="weui-cell__hd">
                         <image src="{{item.icon}}" style="margin-right: 5px;vertical-align: middle;width:60px; height: 40px;"/>
                     </view>
                     <view class="weui-cell__bd">{{item.name}}</view>
-                    <view class="weui-cell__ft weui-cell__ft_in-access today-posts">{{item.todayposts}}</view>
+                    <view class="weui-cell__ft weui-cell__ft_in-access">{{item.todayposts}}</view>
                 </navigator>
 
             </view>

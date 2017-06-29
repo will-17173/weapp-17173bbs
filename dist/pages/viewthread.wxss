@@ -1,0 +1,49 @@
+
+    .page__hd{
+        border-bottom: 1px solid #eee;
+    }
+    .page__title {
+        padding: 0 15px;
+    }
+    .thread-info {
+        font-size: 12px;
+        color: #999;
+        padding: 0 15px 5px;
+    }
+    .thread-info navigator {
+        float: right;
+    }
+    .forum-name {
+        float: right;
+    }
+    .avatar image{
+        width: 32px;
+        height: 32px;
+        border-radius: 100%;
+    }
+    .author-info{
+        font-size: 12px; 
+        color: #999;
+        margin-top: 10px;
+        padding: 0 15px;
+        overflow: hidden;
+    }
+    .author-info .avatar{
+        width: 32px;
+        margin-right: 5px;
+        float: left;
+    }
+    .author-info .author{
+        float: left;
+    }
+    .author-info .floor{
+        width: 40px;
+        float: right;
+        text-align: right;
+        padding-top: 15px;
+    }
+    .message{
+        padding: 0 15px;
+        border-bottom: 1px solid #eee;
+        font-size: 14px;
+    }

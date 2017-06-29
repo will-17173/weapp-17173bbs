@@ -1,0 +1,24 @@
+
+    <view class="page">
+        <view class="page__hd">
+            <view class="page__title">{{title}}</view>
+        </view>
+        <view class="page__bd">
+            <view class="weui-cells weui-cells_after-title">
+
+
+                <navigator url="/pages/viewthread?tid={{item.tid}}&forum={{title}}" class="weui-cell weui-cell_access" hover-class="weui-cell_active"  wx:for="{{list}}" wx:item="item" wx:key="{{tid}}">
+                    <view class="weui-cell__bd list-item">
+                        <view class="author"><image src="{{avatar}}"/>{{item.author}}<text wx:if="{{item.displayorder > 0}}">置顶</text></view>
+                        <view class="subject">{{item.subject}}</view>
+                        <view class="info">
+                            <text class="replies">{{item.replies}}回帖</text>
+                            <text class="date">{{item.dateline}}</text>
+                        </view>
+                    </view>
+                    <view class="weui-cell__ft weui-cell__ft_in-access"/>
+                </navigator>
+
+            </view>
+        </view>
+    </view>

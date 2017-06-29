@@ -1,0 +1,118 @@
+<style>
+    .page__hd{
+        border-bottom: 1px solid #eee;
+    }
+    .page__title {
+        padding: 0 15px;
+    }
+    .thread-info {
+        font-size: 12px;
+        color: #999;
+        padding: 0 15px 5px;
+    }
+    .thread-info navigator {
+        float: right;
+    }
+    .forum-name {
+        float: right;
+    }
+    .avatar image{
+        width: 32px;
+        height: 32px;
+        border-radius: 100%;
+    }
+    .author-info{
+        font-size: 12px; 
+        color: #999;
+        margin-top: 10px;
+        padding: 0 15px;
+        overflow: hidden;
+    }
+    .author-info .avatar{
+        width: 32px;
+        margin-right: 5px;
+        float: left;
+    }
+    .author-info .author{
+        float: left;
+    }
+    .author-info .floor{
+        width: 40px;
+        float: right;
+        text-align: right;
+        padding-top: 15px;
+    }
+    .message{
+        padding: 0 15px;
+        border-bottom: 1px solid #eee;
+        font-size: 14px;
+    }
+</style>
+
+<template>
+    <view class="page">
+        <view class="page__hd">
+            <view class="page__title">{{title}}</view>
+            <view class="thread-info">
+                查看：{{views}} 回复：{{replies}}
+                <navigator url="/pages/forumdisplay?fid={{fid}}&title={{forum}}" class="forum-name">{{forum}}></text>
+                </navigator>
+            </view>
+        </view>
+        <view class="page__bd">
+            <view clsas="post" wx:for="{{list}}" wx:for-item="item" wx:key="{{pid}}" wx:for-index="i">
+                <view class="author-info">
+                    <view class="avatar">
+                        <image src="{{avatar}}"></image>
+                    </view>
+                    <view class="author">{{item.author}}
+                        <view class="date">{{item.dateline}}</view>
+                    </view>
+                    <view class="floor">{{floorMap[i] ? floorMap[i] : i+'楼'}}</view>
+                </view>
+                <view class="message">
+                {{item.message}}
+                </view>
+            </view>
+        </view>
+    </view>
+</template>
+
+<script>
+    import wepy from 'wepy'
+
+    let WxParse = require('../wxParse/wxParse.js');
+
+    export default class Viewthread extends wepy.page {
+        config = {
+            navigationBarTitleText: '17173有料社区'
+        }
+        data = {
+            avatar: 'https://i.17173cdn.com/avatar/YWxqaGBf/85/ed/f3/33608217/small.jpg',
+            floorMap: ['楼主', '沙发', '板凳', '地板']
+        }
+        methods = {
+        }
+        onLoad(params) {
+            let that = this;
+            let urls = this.data.urls = this.$parent.globalData.urls;
+            wepy.request({
+                url: urls.viewthread + encodeURIComponent('&tid=' + params.tid),
+                success: d => {
+                    // console.log(d)
+                    var varibles = d.data.data.Variables;
+                    that.setData({
+                        thread: varibles.thread,
+                        title: varibles.thread.subject,
+                        list: varibles.postlist,
+                        views: varibles.thread.views,
+                        replies: varibles.thread.replies,
+                        forum: params.forum,
+                        fid: varibles.fid
+                    })
+
+                }
+            })
+        }
+    }
+</script>

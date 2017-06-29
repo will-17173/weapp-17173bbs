@@ -1,68 +1,74 @@
+<style src="./weui.wxss">
+
+</style>
+
 <style lang="less">
-.container {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-  box-sizing: border-box;
-}
+    .container {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-between;
+        box-sizing: border-box;
+    }
 </style>
 
 <script>
-import wepy from 'wepy'
-import 'wepy-async-function'
-
-export default class extends wepy.app {
-  config = {
-    pages: [
-      'pages/index'
-    ],
-    window: {
-      backgroundTextStyle: 'light',
-      navigationBarBackgroundColor: '#fff',
-      navigationBarTitleText: 'WeChat',
-      navigationBarTextStyle: 'black'
+    import wepy from 'wepy'
+    import 'wepy-async-function'
+    let ap = 'https://ap.17173.com?u=' + encodeURIComponent('http://bbs.17173.com/api/mobile/index.php?version=4&module=');
+    export default class extends wepy.app {
+        config = {
+            pages: [
+                'pages/index',
+                'pages/home',
+                'pages/forumdisplay',
+                'pages/viewthread'
+            ],
+            window: {
+                backgroundTextStyle: 'light',
+                navigationBarBackgroundColor: '#fff',
+                navigationBarTitleText: 'WeChat',
+                navigationBarTextStyle: 'black'
+            }
+        }
+        globalData = {
+            urls: {
+                index: ap + 'forumindex',
+                forumdisplay: ap + 'forumdisplay',
+                viewthread: ap + 'viewthread'
+            },
+            userInfo: null
+        }
+        constructor() {
+            super()
+            this.use('requestfix')
+        }
+        onLaunch() {
+            this.testAsync()
+        }
+        sleep(s) {
+            return new Promise((resolve, reject) => {
+                setTimeout(() => {
+                    resolve('promise resolved')
+                }, s * 1000)
+            })
+        }
+        async testAsync() {
+            const data = await this.sleep(3)
+            console.log(data)
+        }
+        getUserInfo(cb) {
+            const that = this
+            if (this.globalData.userInfo) {
+                return this.globalData.userInfo
+            }
+            wepy.getUserInfo({
+                success(res) {
+                    that.globalData.userInfo = res.userInfo
+                    cb && cb(res.userInfo)
+                }
+            })
+        }
     }
-  }
-
-  globalData = {
-    userInfo: null
-  }
-
-  constructor () {
-    super()
-    this.use('requestfix')
-  }
-
-  onLaunch() {
-    this.testAsync()
-  }
-
-  sleep (s) {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        resolve('promise resolved')
-      }, s * 1000)
-    })
-  }
-
-  async testAsync () {
-    const data = await this.sleep(3)
-    console.log(data)
-  }
-
-  getUserInfo(cb) {
-    const that = this
-    if (this.globalData.userInfo) {
-      return this.globalData.userInfo
-    }
-    wepy.getUserInfo({
-      success (res) {
-        that.globalData.userInfo = res.userInfo
-        cb && cb(res.userInfo)
-      }
-    })
-  }
-}
 </script>

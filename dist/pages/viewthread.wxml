@@ -1,0 +1,27 @@
+
+    <view class="page">
+        <view class="page__hd">
+            <view class="page__title">{{title}}</view>
+            <view class="thread-info">
+                查看：{{views}} 回复：{{replies}}
+                <navigator url="/pages/forumdisplay?fid={{fid}}&title={{forum}}" class="forum-name">{{forum}}>
+                </navigator>
+            </view>
+        </view>
+        <view class="page__bd">
+            <view clsas="post"  wx:for="{{list}}" wx:for-item="item" wx:key="{{pid}}" wx:for-index="i">
+                <view class="author-info">
+                    <view class="avatar">
+                        <image src="{{avatar}}"/>
+                    </view>
+                    <view class="author">{{item.author}}
+                        <view class="date">{{item.dateline}}</view>
+                    </view>
+                    <view class="floor">{{floorMap[i] ? floorMap[i] : i+'楼'}}</view>
+                </view>
+                <view class="message">
+                {{item.message}}
+                </view>
+            </view>
+        </view>
+    </view>
