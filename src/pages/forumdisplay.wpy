@@ -1,38 +1,67 @@
 <style>
-    .info{ display:flex; justify-content: space-between; font-size: 12px; color: #999;}
-    .info .replies{ flex-glow: 2;}
-    .info .date{ text-align:right;}
-    .subject{ margin-bottom: 5px;}
-    .list-item{ font-size: 14px;}
-    .author{font-size: 12px; line-height: 16px; color:#666; margin-bottom: 5px;}
-    .author image{ width:16px; height: 16px; border-radius:100%; margin-right: 8px;}
-    .author text{ float: right; padding: 0 3px; color: #0089e9;}
-    .page__title{ padding: 0 15px;}
+    .info {
+        display: flex;
+        justify-content: space-between;
+        font-size: 12px;
+        color: #999;
+    }
+    .info .replies {
+        flex-glow: 2;
+    }
+    .info .date {
+        text-align: right;
+    }
+    .subject {
+        margin-bottom: 5px;
+    }
+    .list-item {
+        font-size: 14px;
+    }
+    .author {
+        font-size: 12px;
+        line-height: 16px;
+        color: #666;
+        margin-bottom: 5px;
+    }
+    .author image {
+        width: 16px;
+        height: 16px;
+        border-radius: 100%;
+        margin-right: 8px;
+    }
+    .author text {
+        float: right;
+        padding: 0 3px;
+        color: #0089e9;
+    }
+    .page__title {
+        padding: 0 15px;
+    }
 </style>
 
 <template>
     <view class="page">
-        <view class="page__hd">
-            <view class="page__title">{{title}}</view>
-        </view>
-        <view class="page__bd">
-            <view class="weui-cells weui-cells_after-title">
-
-
-                <navigator url="/pages/viewthread?tid={{item.tid}}&forum={{title}}" class="weui-cell weui-cell_access" hover-class="weui-cell_active" wx:for="{{list}}" wx:item="item" wx:key="{{tid}}">
-                    <view class="weui-cell__bd list-item">
-                        <view class="author"><image src="{{avatar}}"></image>{{item.author}}<text wx:if="{{item.displayorder > 0}}">置顶</text></view>
-                        <view class="subject">{{item.subject}}</view>
-                        <view class="info">
-                            <text class="replies">{{item.replies}}回帖</text>
-                            <text class="date">{{item.dateline}}</text>
-                        </view>
-                    </view>
-                    <view class="weui-cell__ft weui-cell__ft_in-access"></view>
-                </navigator>
-
+        <scroll-view bindscrolltolower="getList()" @scrolltolower="getList()" scroll-y="true" style="height: {{windowHeight}}px;">
+            <view class="page__hd">
+                <view class="page__title">{{title}}</view>
             </view>
-        </view>
+            <view class="page__bd">
+                <view class="weui-cells weui-cells_after-title">
+                    <navigator url="/pages/viewthread?tid={{item.tid}}&forum={{title}}" class="weui-cell weui-cell_access" hover-class="weui-cell_active" wx:for="{{list}}" wx:item="item" wx:key="{{tid}}">
+                        <view class="weui-cell__bd list-item">
+                            <view class="author">
+                                <image src="{{avatar}}"></image>{{item.author}}<text wx:if="{{item.displayorder > 0}}">置顶</text></view>
+                            <view class="subject">{{item.subject}}</view>
+                            <view class="info">
+                                <text class="replies">{{item.replies}}回帖</text>
+                                <text class="date">{{item.dateline}}</text>
+                            </view>
+                        </view>
+                        <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+                    </navigator>
+                </view>
+            </view>
+        </scroll-view>
     </view>
 </template>
 
@@ -43,24 +72,52 @@
             navigationBarTitleText: '17173有料社区'
         }
         data = {
+            windowHeight: null,
+            list: [],
+            page: 1,
+            title: '17173有料社区',
             avatar: 'https://i.17173cdn.com/avatar/YWxqaGBf/85/ed/f3/33608217/small.jpg'
         }
         methods = {
-        }
-        onLoad(params) {
-            let that = this
-            let urls = this.data.urls = this.$parent.globalData.urls;
-            this.setData({
-                title: params.title
-            })
-            wepy.request({
-                url: urls.forumdisplay + encodeURIComponent('&fid=' + params.fid),
-                success: d => {
-                    that.setData({
-                        list: d.data.data.Variables.forum_threadlist
+            getList: () => {
+                let urls = this.data.urls = this.$parent.globalData.urls;
+                if (!this.loading) {
+                    this.loading = true;
+                    wepy.showLoading({
+                        title: '加载中...'
+                    });
+                    wepy.request({
+                        url: urls.forumdisplay + encodeURIComponent('&fid=' + this.fid + '&page=' + this.page),
+                        success: d => {
+                            this.loading = false;
+                            wepy.hideLoading();
+                            this.page++;
+                            this.list = this.list.concat(d.data.data.Variables.forum_threadlist);
+                            this.$apply();
+                            // this.setData({
+                            //     list: this.list
+                            // })
+                            console.log(this.data)
+                        }
                     })
                 }
+            }
+        }
+        onLoad(params) {
+            let res = wx.getSystemInfoSync();
+            this.windowHeight = res.windowHeight;
+            this.title = params.title
+            this.fid = params.fid;
+            // this.setData({
+            //     windowHeight: res.windowHeight,
+            //     title: params.title
+            // })
+            
+
+            wepy.setNavigationBarTitle({
+                title: params.title
             })
+            this.methods.getList();
         }
     }
 </script>

@@ -1,5 +1,6 @@
 <style>
     .today-posts{ font-size: 12px;}
+    .page__hd{ padding: 0 15px;}
 </style>
 
 <template>
@@ -26,14 +27,12 @@
 <script>
     import wepy from 'wepy'
 
-    
-
-
     export default class Home extends wepy.page {
         config = {
             navigationBarTitleText: '17173有料社区'
         }
         data = {
+            forumlist: null,
             icon: 'http://images.17173cdn.com/2016/newbbs/2016/11/17/quwei.png'
         }
         methods = {
@@ -46,9 +45,11 @@
                 url: urls.index,
                 success: function(d) {
                     if(d.statusCode == 200){
-                        that.setData({
-                            forumlist: d.data.data.Variables.forumlist
-                        })
+                        that.forumlist = d.data.data.Variables.forumlist;
+                        that.$apply();
+                        // that.setData({
+                        //     forumlist: d.data.data.Variables.forumlist
+                        // })
                     }
                 }
             })

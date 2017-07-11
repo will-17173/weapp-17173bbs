@@ -46,6 +46,16 @@
         }
         onLaunch() {
             this.testAsync()
+            wepy.login({
+                success: function(res){
+                    console.log(res);
+                    if(res.code){
+                        
+                    } else{
+                        
+                    }
+                }
+            })
         }
         sleep(s) {
             return new Promise((resolve, reject) => {
